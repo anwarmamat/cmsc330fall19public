@@ -159,4 +159,4 @@ The ocaml version should be 4.07.1, and if you run
 
 You should see all of the following:
 
-ocamlfind ounit utop dune qcheck
+`ocamlfind ounit utop dune qcheck`
