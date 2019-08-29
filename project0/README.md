@@ -40,7 +40,7 @@ You should not get any errors.
 Computers are like people, each unique in its own way. These instructions
 may require slight (or large) modifications depending on your setup.
 Search engines are your friend if something goes wrong. If you are unable
-to install **anything**, please come to office hours **as soon as possible**. 
+to install **anything**, please come to office hours **as soon as possible**.
 
 ## macOS
 
@@ -72,7 +72,7 @@ The OCaml package manager needs some initial configuration.
 First we want to make sure that we have the correct version of OCaml. We'll be
 using version 4.07.0. Run  `ocaml -version` to see which version you have.
 
-If the version is not 4.07.0, then use `opam switch 4.07.0` (you may need to 
+If the version is not 4.07.0, then use `opam switch 4.07.0` (you may need to
 run `opam switch create 4.07.0` instead). Don't forget to run the
 advertised ``eval `opam config env` `` to update your PATH accordingly.
 
@@ -136,12 +136,23 @@ Finally, we'll install Rust. Note this may take some time.
 
 Most everything is installed on Grace, but there are still some
 language-specific packages that must be installed. First, we
-configure some things. Run the following commands.
+configure some things. Do the following:
 
+* clone this repository
+* cd into project0
 * `csh <grace.csh` This will take quite a long time to run. Be patient.
+* `opam init` (when prompted to modify .profile say no)
 * ``eval `opam config env` `` (these are **backticks** located to the left
   of the 1 key, not single quotes).
-* `opam switch 4.07.0`
-* ``eval `opam config env` `` (Yes, again)
-* `opam install ocamlfind ounit utop dune qcheck`
-* Log out and log back in. Everything should work now!
+* At this point, log out of grace and log back in. Then run:
+* ``eval `opam config env` `` (yes, again)
+
+From there everything should be setup correctly.
+
+If you run:
+
+ocaml -version
+opam list
+The ocaml version should be 4.07.1, and in the opam list output you should see all of the following:
+
+ocamlfind ounit utop dune qcheck
