@@ -151,8 +151,12 @@ From there everything should be setup correctly.
 
 If you run:
 
-ocaml -version
-opam list
-The ocaml version should be 4.07.1, and in the opam list output you should see all of the following:
+`ocaml -version`
+
+The ocaml version should be 4.07.1, and if you run
+
+`opam list`
+
+You should see all of the following:
 
 ocamlfind ounit utop dune qcheck
