@@ -107,7 +107,7 @@ have successfully installed anyway.
 
 The OCaml package manager needs some initial configuration.
 
-* `opam init`
+* `opam init` (if you are using the Windows Subsytem for Linux, you must include the --disable-sandboxing flag whenever you run `opam init`)
 * If it hangs at "Fetching repository information" press Enter. This may take awhile, be patient.
 * When prompted to modify `~/.profile` (or another file) type "n".
 * Open `~/.profile` (or the file mentioned above) in your text editor (probably emacs).
