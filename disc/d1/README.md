@@ -37,7 +37,7 @@ An interpreted language is one where the interpreter converts the first line of 
   * Try `.inspect` and `.methods`. E.g. `"hi".methods` will list all String methods. Library convention is that methods which return a `bool` end in `?` and methods that modify the string/array/object end in `!` (e.g. `include?` checks if a string contains a substring or not). The `.inspect` method will print arrays like you would see them in source code (e.g. try `puts a.inspect` where `a` is some array).
 
 3. Clone today's discussion from the public repo.
- Today's exercises ARE NOY GRADED, but we have provided the public tests in public.rb to test your code. We will have **unannounced** graded labs (like mini-mini projects or worksheets).
+ Today's exercises ARE NOT GRADED, but we have provided the public tests in public.rb to test your code. We will have **unannounced** graded labs (like mini-mini projects or worksheets).
 
   * Arrays in Ruby are heterogenous and of indefinite length because Ruby loves you. Can be declared using `Array.new()` or `[]`. Example: shift_letters (Note: this example has some Character methods we don't expect you to memorize)
   * Hashes in Ruby can have heterogenous keys. What data structure in Java are hashes most similar to? (Hint: it's in the name). You should learn to love hashes. They can be initialized using `{}` or `Hash.new(default value)`. Example: add_to_inventory
