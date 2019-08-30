@@ -36,7 +36,8 @@ An interpreted language is one where the interpreter converts the first line of 
   * All variables in Ruby are objects. No primitives. Even numbers and bools are objects. In fact `5 + 7` is syntactic sugar for calling the method `+` on the object 5 and passing the object 7 as an argument, i.e., `5.+(7)`. You can often skip parenthesis in Ruby method calls, e.g. with the `puts()` method.
   * Try `.inspect` and `.methods`. E.g. `"hi".methods` will list all String methods. Library convention is that methods which return a `bool` end in `?` and methods that modify the string/array/object end in `!` (e.g. `include?` checks if a string contains a substring or not). The `.inspect` method will print arrays like you would see them in source code (e.g. try `puts a.inspect` where `a` is some array).
 
-3. Clone today's discussion from the public repo.
+3. Clone today's discussion from the public repo using:
+  `git clone https://github.com/anwarmamat/cmsc330fall19public`
  Today's exercises ARE NOT GRADED, but we have provided the public tests in public.rb to test your code. We will have **unannounced** graded labs (like mini-mini projects or worksheets).
 
   * Arrays in Ruby are heterogenous and of indefinite length because Ruby loves you. Can be declared using `Array.new()` or `[]`. Example: shift_letters (Note: this example has some Character methods we don't expect you to memorize)
