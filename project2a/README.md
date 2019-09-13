@@ -101,7 +101,7 @@ volume (1, 1, 1) (1, 1, 1) = 0
 equiv_frac (1, 2) (2, 4) = true
 equiv_frac (2, 4) (1, 2) = true
 equiv_frac (1, 2) (1, 2) = true
-equiv_frac (3, 12) (2, 6) = true
+equiv_frac (3, 12) (2, 6) = false
 equiv_frac (1, 2) (3, 4) = false
 equiv_frac (1, 0) (2, 0) = false
 ```
