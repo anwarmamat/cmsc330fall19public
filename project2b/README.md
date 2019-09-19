@@ -40,7 +40,7 @@ Consider the following code snippet in C that demonstrates the function of block
 
 As you may remember from 216, the inner braces create a new "scope" for variable bindings. At Point A (marked in a comment), `a` is bound to 20, but as soon as the scope is popped on the next line (the closing curly brace), `a` returns to 30, since it was bound to that value in the previous scope. `c` is completely dropped out of memory at Point B, since it was only defined in the inner scope. Additionally, `b` is still bound to 40 at Point A, since it was bound in the outer scope. In Part 3, you'll be trying to implement your own data structure, which you'll define as `type lookup_table`, and you'll try to replicate this behavior.
 
-If you're a little rusty on block scoping, you can check out [this link][block scope] or play around with scopes and print statements in C using gcc. Note that you do *not* have to worry about types, since every value will be an `int`.
+If you're a little rusty on block scoping, you can check out the section on block scope [here](https://www.geeksforgeeks.org/scope-rules-in-c/) or play around with scopes and print statements in C using gcc. Note that you do *not* have to worry about types, since every value will be an `int`.
 
 Since we are not forcing you to implement the lookup table in any particular way, we will only test your table through the functions that you implement (specified below). This means that there are many different ways to solve this portion of the project, and as long as all the functions behave as expected, it doesn't matter exactly how you store the data.
 
