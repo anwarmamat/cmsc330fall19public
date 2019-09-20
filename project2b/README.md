@@ -251,7 +251,7 @@ int_common t 8 9 = 8
 - **Examples:**
 ```
 let t = (int_insert 1 (int_insert 3 (int_insert 2 empty_int_tree)))
-int_level_print 1 t = [1;3]
+int_level 1 t = [1;3]
 ```
 
 ## Part 3: Polymorphic BST
