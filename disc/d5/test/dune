@@ -1,0 +1,2 @@
+(tests (names public student)
+(libraries d5 oUnit))
