@@ -1,0 +1,3 @@
+(executable
+  (name viz)
+  (libraries p3))

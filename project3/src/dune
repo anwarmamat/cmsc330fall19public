@@ -1,0 +1,4 @@
+(library
+  (name p3)
+  (modules lexer parser nfa regex)
+  (libraries sets))
