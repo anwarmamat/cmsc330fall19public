@@ -1,0 +1,10 @@
+EXCLUDE_QUERY_DIR
+B /home/amress/.opam/4.07.0/lib/ocaml
+B /mnt/c/Users/Pavan/Documents/330/tafall19/projects/p3/dep/sets
+B ../_build/default/bin/.viz.eobjs/byte
+B ../_build/default/src/.p4.objs/byte
+S /home/amress/.opam/4.07.0/lib/ocaml
+S /mnt/c/Users/Pavan/Documents/330/tafall19/projects/p3/dep/sets
+S .
+S ../src
+FLG -w -40

@@ -1,4 +1,4 @@
 (library
-  (name p3)
-  (modules lexer parser nfa regex)
-  (libraries sets))
+  (name p4)
+  (modules nfa regexp)
+  (libraries str sets))

@@ -1,38 +1,60 @@
-(* NFA Type *)
+open List
+open Sets
+
+(*********)
+(* Types *)
+(*********)
 
 type ('q, 's) transition = 'q * 's option * 'q
-type ('q, 's) nfa = {
-  qs : 'q list;
-  ss : 's list;
-  ts : ('q, 's) transition list;
-  q0 : 'q;
-  fs : 'q list;
+
+type ('q, 's) nfa_t = {
+  sigma: 's list;
+  qs: 'q list;
+  q0: 'q;
+  fs: 'q list;
+  delta: ('q, 's) transition list;
 }
 
+(***********)
 (* Utility *)
+(***********)
 
-(* Split a string up into a list of characters. *)
-let explode (s : string) : char list =
+(* explode converts a string to a character list *)
+let explode (s: string) : char list =
   let rec exp i l =
-    if i < 0 then l else exp (i - 1) (s.[i] :: l) in
+    if i < 0 then l else exp (i - 1) (s.[i] :: l)
+  in
   exp (String.length s - 1) []
 
+(****************)
 (* Part 1: NFAs *)
+(****************)
 
-(* Returns the move set of qs on s. *)
-let move (m : ('q, 's) nfa) (qs : 'q list) (s : 's option) : 'q list =
-  failwith "not implemented"
+let move (nfa: ('q,'s) nfa_t) (qs: 'q list) (s: 's option) : 'q list =
+  failwith "unimplemented"
 
-(* Returns the epsilon closure of qs. *)
-let rec e_closure (m : ('q, 's) nfa) (qs : 'q list) : 'q list =
-  failwith "not implemented"
+let e_closure (nfa: ('q,'s) nfa_t) (qs: 'q list) : 'q list =
+  failwith "unimplemented"
 
-(* Returns whether the NFA m accepts string s. *)
-let accept (m : ('q, char) nfa) (s : string) : bool =
-  failwith "not implemented"
+let accept (nfa: ('q,char) nfa_t) (s: string) : bool =
+  failwith "unimplemented"
 
+(*******************************)
 (* Part 2: Subset Construction *)
+(*******************************)
 
-(* Converts an NFA to a DFA via the subset construction. *)
-let rec dfa_of_nfa (m : ('q, 's) nfa) : ('q list, 's) nfa =
-  failwith "not implemented"
+let new_states (nfa: ('q,'s) nfa_t) (qs: 'q list) : 'q list list =
+  failwith "unimplemented"
+
+let new_trans (nfa: ('q,'s) nfa_t) (qs: 'q list) : ('q list, 's) transition list =
+  failwith "unimplemented"
+
+let new_finals (nfa: ('q,'s) nfa_t) (qs: 'q list) : 'q list list =
+  failwith "unimplemented"
+
+let rec nfa_to_dfa_step (nfa: ('q,'s) nfa_t) (dfa: ('q list, 's) nfa_t)
+    (work: 'q list list) : ('q list, 's) nfa_t =
+  failwith "unimplemented"
+
+let nfa_to_dfa (nfa: ('q,'s) nfa_t) : ('q list, 's) nfa_t =
+  failwith "unimplemented"

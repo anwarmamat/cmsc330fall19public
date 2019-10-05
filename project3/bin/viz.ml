@@ -1,16 +1,19 @@
-open P3.Nfa
-open P3.Regex
-open P3.Parser
+open P4.Nfa
+open P4.Regexp
 
 let string_of_int_list lst =
   "[" ^ String.concat ";" (List.map string_of_int lst) ^ "]"
+
 let string_of_int_list_list lst =
   "[" ^ String.concat ";" (List.map string_of_int_list lst) ^ "]"
+
 let init_str =
   "digraph G { \n rankdir=LR; "
   ^ string_of_int (Hashtbl.hash "-1")
   ^ " [style=\"invis\"]; \n"
+
 let end_str = "\n}"
+
 let nodup x lst = if List.mem x lst then lst else x :: lst
 
 let string_of_vtx show lst =
@@ -30,9 +33,10 @@ let string_of_ed show lst =
           (Hashtbl.hash s2) c )
     "" lst
 
-let write_nfa_to_graphviz (show : 'q -> string) (nfa : ('q, char) P3.Nfa.nfa) : bool =
+let write_nfa_to_graphviz (show : 'q -> string) (nfa : ('q, char) nfa_t) : bool
+    =
   let name = "output.viz" in
-  let ss, fs, ts = (nfa.q0, nfa.fs, nfa.ts) in
+  let ss, fs, ts = (nfa.q0, nfa.fs, nfa.delta) in
   let sv = (show ss, List.mem ss fs) in
   let vt, ed =
     List.fold_left
@@ -43,30 +47,39 @@ let write_nfa_to_graphviz (show : 'q -> string) (nfa : ('q, char) P3.Nfa.nfa) : 
         let pair = List.mem (v2, c, v1) ts in
         let e = (v1', c', pair, v2') in
         (nodup v2' (nodup v1' vt), nodup e ed) )
-      ([], []) ts in
+      ([], []) ts
+  in
   let ed = (("-1", false), " ", false, (show ss, List.mem ss fs)) :: ed in
   let dot =
-    init_str ^ string_of_vtx show (sv :: vt) ^ string_of_ed show ed ^ end_str in
+    init_str ^ string_of_vtx show (sv :: vt) ^ string_of_ed show ed ^ end_str
+  in
   let file = open_out_bin name in
   output_string file dot ;
   flush file ;
-  let r = Sys.command (Printf.sprintf "dot %s -Tpng -o output.png && rm %s" name name) in
-  r = 0
+  Sys.command (Printf.sprintf "dot %s -Tpng -o output.png && rm %s" name name)
+  = 0
 
-let () =
-  print_string "Type regexp to visualize: ";
-  let line = read_line () in
-  print_string "Convert to DFA (y/n)? ";
-  let line2 = read_line () in
-  let nfa = nfa_of_string line in
-  if line2 = "n" then
-    if write_nfa_to_graphviz string_of_int nfa then
-      print_string "Success! Open 'output.png' to see your visualized NFA.\n"
-    else
-      print_string
-        "Failure! Are you sure you have graphviz installed on your machine?\n"
-  else if write_nfa_to_graphviz string_of_int_list (dfa_of_nfa nfa) then
-    print_string "Success! Open 'output.png' to see your visualized DFA.\n"
+;;
+print_string "Type regexp to visualize: "
+
+let line = read_line ()
+
+;;
+print_string "Convert to DFA (y/n)? "
+
+let line2 = read_line ()
+
+let nfa = string_to_nfa line
+
+;;
+if line2 = "n" then
+  if write_nfa_to_graphviz string_of_int nfa then
+    print_string "Success! Open 'output.png' to see your visualized NFA.\n"
   else
     print_string
       "Failure! Are you sure you have graphviz installed on your machine?\n"
+else if write_nfa_to_graphviz string_of_int_list (nfa_to_dfa nfa) then
+  print_string "Success! Open 'output.png' to see your visualized DFA.\n"
+else
+  print_string
+    "Failure! Are you sure you have graphviz installed on your machine?\n"
