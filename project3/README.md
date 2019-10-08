@@ -1,6 +1,6 @@
 # Project 3: Regular Expression Engine
 
-Due: October 17 (Late October 18) at 11:59:59 PM
+Due: October 21 (Late October 22) at 11:59:59 PM
 
 Points: 35P/35R/30S
 
