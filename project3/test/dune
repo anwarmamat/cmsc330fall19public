@@ -1,6 +1,6 @@
 (executables
   (names public student)
-  (libraries p3 oUnit))
+  (libraries str p4 oUnit))
 
 (alias
   (name runtest)

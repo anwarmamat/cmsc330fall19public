@@ -1,7 +1,23 @@
-open P3.Nfa
-open P3.Regex
-open P3.Parser
+open P4.Nfa
+open P4.Regexp
 open OUnit2
+
+let re_to_str r =
+  let surround l = ("(" :: l) @ [")"] in
+  let rec r2str = function
+    | Empty_String -> ["E"]
+    | Char c -> [String.make 1 c]
+    | Union (r1, r2) ->
+        let l1 = surround @@ r2str r1 and l2 = surround @@ r2str r2 in
+        l1 @ ("|" :: l2)
+    | Concat (r1, r2) ->
+        let l1 = surround @@ r2str r1 and l2 = surround @@ r2str r2 in
+        l1 @ l2
+    | Star r1 ->
+        let l1 = surround @@ r2str r1 in
+        l1 @ ["*"]
+  in
+  String.concat "" (r2str r)
 
 let assert_true x = assert_equal true x
 
@@ -25,10 +41,10 @@ let assert_dfa m =
         | None -> true
         | Some _ ->
             let others =
-              List.filter (fun (q', c', f') -> q' = q && c' = c) m.ts
+              List.filter (fun (q', c', f') -> q' = q && c' = c) m.delta
             in
             res || List.length others > 1 )
-      false m.ts
+      false m.delta
   in
   if nondet then assert_failure @@ Printf.sprintf "NFA is not DFA"
 
@@ -77,4 +93,4 @@ let assert_set_eq lst1 lst2 =
   assert_equal (es lst1) (es lst2)
 
 let assert_regex_string_equiv rxp =
-  assert_equal rxp @@ regex_of_string @@ string_of_regex rxp
+  assert_equal rxp @@ string_to_regexp @@ re_to_str rxp
