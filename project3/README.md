@@ -179,7 +179,7 @@ To write `nfa_to_dfa` we will  write some helpers. These helpers follow the NFA 
 * **Description:** Given an NFA and a list of states from that NFA (a single state in the DFA) computes all the DFA states that you can get to from a transition out of `qs` (including the dead state). You can return the list in any order, with or without duplicates. Dead states are represented by empty lists. *Note: each element in the list corresponds to all of the states you can get to from one character of the alphabet (`sigma`) followed by any number of epsilon transitions*
 * **Examples:**
 ```
-new_states nfa_ex [0] = [[1; 2]; []; []]
+new_states nfa_ex [0] = [[1; 2]]
 new_states dfa_ex [0; 1] = [[1]; [0]; [2]]
 ```
 
