@@ -20,7 +20,7 @@ To begin this project, you will need to commit any uncommitted changes to your l
 
 This is NOT a pair project. You must work on this project alone as with most other CS projects. See the Academic Integrity section for more information. In your code, you may use __any__ non-imperative standard library functions (with the exception of printing, see below), but the ones that will be useful to you will be found in the [`Pervasives`][pervasives doc], [`List`][list doc] and [`String`][string doc] modules. The only imperative feature you may use is the provided `fresh` function in Part 3. You will receive a 0 for any functions using restricted features - we will be checking your code!
 
-Several helper functions have been provided for you, as detailed at the end of this document. We have also provided a `Sets` module that correctly implements the functions for a functional [Set module][sets].
+Several helper functions have been provided for you, as detailed at the end of this document. We have also provided a `Sets` module that correctly implements the functions for a functional [Set module][sets].  **Note:** the functions in the `Sets` module assume that the inputs are valid sets (i.e., they do not contain duplicates).  They will have undefined behavior if you try to give them inputs that do not meet this requirement (such as `[1; 2; 2; 3]`).
 
 ### Testing
 
