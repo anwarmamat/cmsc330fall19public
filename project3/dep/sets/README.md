@@ -3,9 +3,9 @@
 - **Description**: Inserts `x` into the set `a`.
 - **Examples:**
 ```
-insert 2 []
-insert 3 (insert 2 [])
-insert 3 (insert 3 (insert 2 []))
+insert 2 [] = [2]
+insert 3 (insert 2 []) = [3; 2]
+insert 3 (insert 3 (insert 2 [])) = [2; 3] (* duplicates are not added! *)
 ```
 
 #### elem x a
