@@ -20,13 +20,13 @@ To begin this project, you will need to commit any uncommitted changes to your l
 
 This is NOT a pair project. You must work on this project alone as with most other CS projects. See the Academic Integrity section for more information. In your code, you may use __any__ non-imperative standard library functions (with the exception of printing, see below), but the ones that will be useful to you will be found in the [`Pervasives`][pervasives doc], [`List`][list doc] and [`String`][string doc] modules. The only imperative feature you may use is the provided `fresh` function in Part 3. You will receive a 0 for any functions using restricted features - we will be checking your code!
 
-Several helper functions have been provided for you, as detailed at the end of this document. We have also provided a `Sets` module that correctly implements the functions for a functional [Set module][sets].
+Several helper functions have been provided for you, as detailed at the end of this document. We have also provided a `Sets` module that correctly implements the functions for a functional [Set module][sets].  **Note:** the functions in the `Sets` module assume that the inputs are valid sets (i.e., they do not contain duplicates).  They will have undefined behavior if you try to give them inputs that do not meet this requirement (such as `[1; 2; 2; 3]`).
 
 ### Testing
 
 The procedure for testing this project is the same as the previous project. `dune` handles the majority of the work but, an environment variable must be set for `dune` to know where to find the precompiled binary files distributed with the project.
 
-Public and student tests can be run using the same `dune` command that you used in the previous projects but, you need to set the environment variable `OCAMLPATH` before running the command. The exact value of OCAMLPATH will depend on the version of OCaml you are using. If you have version 4.07.0, you can use the following commands verbatim but, if you have 4.07.1 you will need to replace all instances of `dep` with `dep4.07.1`. The full command is now `env OCAMLPATH=dep dune runtest -f`. Setting `OCAMLPATH` tells `dune` where it can find the functions over sets that we have provided. You will need to provide this environment variable for every `dune` command so you may want to add it to your environment once by running `OCAMLPATH=dep` as separate command before using `dune`. We have also provided a shell script `test.sh` that runs the command given above.
+Public and student tests can be run using the same `dune` command that you used in the previous projects but, you need to set the environment variable `OCAMLPATH` before running the command. The exact value of OCAMLPATH will depend on the version of OCaml you are using. If you have version 4.07.0, you can use the following commands verbatim but, if you have 4.07.1 you will need to replace all instances of `dep` with `dep4.07.1`. The full command is now `env OCAMLPATH=dep dune runtest -f`. Setting `OCAMLPATH` tells `dune` where it can find the functions over sets that we have provided. You will need to provide this environment variable for every `dune` command so you may want to add it to your environment once by running `OCAMLPATH=dep` as separate command before using `dune`. We have also provided a shell script `test.sh` that runs the command given above.  To run this, type `sh test.sh` at a terminal.
 
 For testing your regular expressions and `nfa_to_dfa`, we've provided another build target: `viz`. When you run this command, it will read a regular expression from standard in, compose an NFA from it, and export that NFA to Graphviz before rendering to a PNG. For this target to work, however, you must install Graphviz.
 
@@ -179,7 +179,7 @@ To write `nfa_to_dfa` we will  write some helpers. These helpers follow the NFA 
 * **Description:** Given an NFA and a list of states from that NFA (a single state in the DFA) computes all the DFA states that you can get to from a transition out of `qs` (including the dead state). You can return the list in any order, with or without duplicates. Dead states are represented by empty lists. *Note: each element in the list corresponds to all of the states you can get to from one character of the alphabet (`sigma`) followed by any number of epsilon transitions*
 * **Examples:**
 ```
-new_states nfa_ex [0] = [[1]; []; []]
+new_states nfa_ex [0] = [[1; 2]]
 new_states dfa_ex [0; 1] = [[1]; [0]; [2]]
 ```
 
