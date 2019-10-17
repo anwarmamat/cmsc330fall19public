@@ -76,14 +76,13 @@ eq (cat "z" (insert "a" (insert "b" []))) (insert ("z", "a") (insert ("z", "b") 
 eq (cat 1 []) [] = true
 ```
 
-[pervasives doc]: https://caml.inria.fr/pub/docs/manual-ocaml/libref/Pervasives.html
-[git instructions]: ../git_cheatsheet.md
-[submit server]: https://submit.cs.umd.edu
-[web submit link]: ../common-images/web_submit.jpg
-[web upload example]: ../common-images/web_upload.jpg
-[Pythagorean Theorem]: https://en.wikipedia.org/wiki/Pythagorean_theorem
-[sum of cubes]: images/sum-of-cubes.png
-[Euclidean Algorithm]: https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
-[Ackermann–Péter function]:https://en.wikipedia.org/wiki/Ackermann_function
-[SetOpCalc]: https://www.mathportal.org/calculators/misc-calculators/sets-calculator.php
-[SetWiki]:https://en.wikipedia.org/wiki/Set_(mathematics)#External_links
+#### intersection a b
+
+- **Type**: `'a list -> 'a list -> 'a list`
+- **Description**: Returns the intersection of sets `a` and `b`. Formally, A ∩ B = {x | xϵA ∧ xϵB}.
+- **Examples:**
+```
+eq (intersection (insert 3 (insert 5 (insert 2 []))) []) [] = true
+eq (intersection (insert 5 (insert 7 (insert 3 (insert 2 [])))) (insert 6 (insert 4 []))) [] = true
+eq (intersection (insert 5 (insert 2 [])) (insert 4 (insert 3 (insert 5 [])))) (insert 5 []) = true
+```
