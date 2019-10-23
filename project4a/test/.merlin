@@ -1,0 +1,12 @@
+EXCLUDE_QUERY_DIR
+B /home/vinnie/.opam/4.07.0/lib/bytes
+B /home/vinnie/.opam/4.07.0/lib/oUnit
+B /home/vinnie/.opam/4.07.0/lib/ocaml
+B ../_build/default/src/.p4a.objs/byte
+B ../_build/default/test/.student.eobjs/byte
+S /home/vinnie/.opam/4.07.0/lib/bytes
+S /home/vinnie/.opam/4.07.0/lib/oUnit
+S /home/vinnie/.opam/4.07.0/lib/ocaml
+S ../src
+S .
+FLG -w -40

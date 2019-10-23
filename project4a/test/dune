@@ -1,5 +1,5 @@
 (executables
-  (names student public release)
+  (names student public)
   (libraries p4a oUnit))
 
 (alias
@@ -7,5 +7,4 @@
   (deps (source_tree ./data))
   (action
     (progn (run ./student.bc)
-           (run ./public.bc)
-           (run ./release.bc))))
+           (run ./public.bc))))
