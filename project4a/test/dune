@@ -1,0 +1,11 @@
+(executables
+  (names student public release)
+  (libraries p4a oUnit))
+
+(alias
+  (name runtest)
+  (deps (source_tree ./data))
+  (action
+    (progn (run ./student.bc)
+           (run ./public.bc)
+           (run ./release.bc))))
