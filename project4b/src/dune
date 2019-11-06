@@ -1,0 +1,4 @@
+(library
+  (name p4b)
+  (modules eval lexer smallCTypes evalUtils utils parser tokenTypes)
+  (libraries str))

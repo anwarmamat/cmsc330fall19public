@@ -1,0 +1,6 @@
+_build
+test
+bin
+dep
+*.md
+*.pdf
