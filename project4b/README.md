@@ -2,7 +2,7 @@
 
 CMSC 330, Summer 2019
 
-Due November 14th at 11:59pm (Late: November 15th at 11:59pm)
+Due November 19th at 11:59pm (Late: November 20th at 11:59pm)
 
 P/R/S: 50/50/0
 
