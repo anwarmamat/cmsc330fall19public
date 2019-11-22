@@ -1,9 +1,10 @@
 (executables
-  (names public)
+  (names public student)
   (libraries p5 oUnit))
 
 (alias
   (name runtest)
   (deps (source_tree ./data))
   (action
-    (progn (run ./public.bc))))
+    (progn (run ./public.bc)
+           (run ./student.bc))))
