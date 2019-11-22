@@ -1,0 +1,3 @@
+(executable
+  (name evalc)
+  (libraries p5))

@@ -1,0 +1,11 @@
+_build
+bin
+test
+submit.jar
+.submit
+.submitUser
+.submitIgnore
+evalc
+lazy.sh
+semantics.pdf
+README.md

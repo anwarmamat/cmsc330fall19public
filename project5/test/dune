@@ -1,0 +1,9 @@
+(executables
+  (names public)
+  (libraries p5 oUnit))
+
+(alias
+  (name runtest)
+  (deps (source_tree ./data))
+  (action
+    (progn (run ./public.bc))))
