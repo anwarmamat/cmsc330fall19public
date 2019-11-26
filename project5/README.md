@@ -42,6 +42,8 @@ You'll see that we've added a new type of expression, `FunctionCall of string * 
 
 In order to add this functionality, we need new tokens. Take a look at `tokentypes.ml`. You'll see that we've added two new tokens, `Tok_Comma` and `Tok_Return`. You can convince yourself why adding these tokens captures the essence of adding functions in SmallC (the comma for having a multi-argument function, and return to be able to return a value out of a function).
 
+Additionally, identifiers can now contain underscores.
+
 In this project, you will be able to tokenize, parse, and evaluate the following (valid) SmallC program:
 ```c
 int foo(int a, int b) {
@@ -57,7 +59,7 @@ int factorial(int n) {
   else {
     return n * factorial(n-(1));
   }
-}  
+}
 
 int main() {
   int a;
@@ -75,7 +77,7 @@ int main() {
 
 ## Lazy Evaluation and Thunks
 
-In lecture, we introduced the concept of a lazy evaluation or "call-by-name", which is where arguments to a function are only evaluated if they are used by the function. While C is call-by-value, there are some advantages to call-by-name evaluation. For instance, if one of the arguments requires us to go into an infinite recursion, not evaluating it unless absolutely necessary is a pretty good strategy.  
+In lecture, we introduced the concept of a lazy evaluation or "call-by-name", which is where arguments to a function are only evaluated if they are used by the function. While C is call-by-value, there are some advantages to call-by-name evaluation. For instance, if one of the arguments requires us to go into an infinite recursion, not evaluating it unless absolutely necessary is a pretty good strategy.
 Despite these advantages, a practical drawback of lazy evaluation is that it allows for a lot of crazy things to happen. What if a parameter is supposed to be of type `int`, but we pass in type `bool`? What if I pass in something like `x - y + z + 2` where `x`, `y`, and `z` are local variables in my current environment? Since we don't greedily evaluate all of our parameters beforehand, we open ourselves to some vulnerabilities.
 
 To fix these issues with lazy evaluation we use **Thunks**, a method to combine an expression, the environment it should be evaluated in, and the expected type into a single  value. We define: `Thunk of environment * expr * data_type`. When evaluating a function call each expression is wrapped in a thunk with the **callers** environment and the type the **callee's** corresponding parameter expects. By maintaining an environment, we can now evaluate expressions _across_ different environments, and by maintaining an expected type, we can catch instances where the types do not match.
@@ -91,7 +93,7 @@ int infinite_loop(int a) {
 
 int normal_function(int unecessary_argument) {
   return 3;
-}  
+}
 
 int main() {
   int a;
@@ -100,11 +102,11 @@ int main() {
   b = normal_function(infinite_loop(a));
 }
 ```
-Here, the code will not evaluate the infinite loop argument of the function `normal_function` and as a result, will execute normally and not cause a StackOverflow error.  
+Here, the code will not evaluate the infinite loop argument of the function `normal_function` and as a result, will execute normally and not cause a StackOverflow error.
 
 ### Part 1: Lexing and Parsing
 
-In order to extend the lexer, add support for the tokens mentioned `Functions` section, `Tok_Comma` and `Tok_Return`.
+In order to extend the lexer, add support for the tokens mentioned `Functions` section, `Tok_Comma` and `Tok_Return`. Additionally, ensure your `Tok_ID` allows for underscores in identifiers, as mentioned above.
 In order to extend the parser, refer to this updated CFG that includes support for function calls and function declarations.
 
 #### Expressions
@@ -126,16 +128,16 @@ In order to extend the parser, refer to this updated CFG that includes support f
 - **FunctionCall** -> _`Tok_ID`_ `(` `)` | _`Tok_ID`_ `(` Expr ExprList `)`
     - ExprList -> `,` Expr ExprList | ε
 
-In this modified grammar for expressions, notice that you will have to parse function calls whenever you parse a primary expression. The derivation rule for FunctionCall may be slightly tricky, but the idea is any function call will involve a `Tok_ID`, namely the name of the function that is being called, followed by any number of comma-separated expressions surrounded in parentheses. Be careful with how you parse parentheses here, since each argument passed into a function can have commas of its own, as in the following example:    
+In this modified grammar for expressions, notice that you will have to parse function calls whenever you parse a primary expression. The derivation rule for FunctionCall may be slightly tricky, but the idea is any function call will involve a `Tok_ID`, namely the name of the function that is being called, followed by any number of comma-separated expressions surrounded in parentheses. Be careful with how you parse parentheses here, since each argument passed into a function can have commas of its own, as in the following example:
 ```c
 x = foo((2+2*3), (9+4), (1 == 2))
 ```
 
 
-#### Statements      
+#### Statements
 
 - Stmt -> StmtOptions Stmt | StmtOptions
-  - StmtOptions -> DeclareStmt | AssignStmt | PrintStmt | IfStmt | ForStmt | WhileStmt | **FunctionDecl**
+  - StmtOptions -> DeclareStmt | AssignStmt | PrintStmt | IfStmt | ForStmt | WhileStmt | ReturnStmt
     - DeclareStmt -> BasicType ID `;`
       - BasicType -> `int` | `bool`
     - AssignStmt -> ID `=` Expr `;`
@@ -144,15 +146,16 @@ x = foo((2+2*3), (9+4), (1 == 2))
       - ElseBranch -> `else` `{` Stmt `}` | ε
     - ForStmt -> `for` `(` ID `from` Expr `to` Expr `)` `{` Stmt `}`
     - WhileStmt -> `while` `(` Expr `)` `{` Stmt `}`
-    - **FunctionDecl** -> BasicType ID `(` `)` { Stmt } | BasicType ID `(` Param Params `)` { Stmt }
-      - Params -> `,` Param Params | ε
-      - Param -> BasicType ID
+    - ReturnStmt -> `return` Expr `;`
+- TopLevel -> **FunctionDecl** TopLevel | ε
+  - **FunctionDecl** -> BasicType ID `(` `)` `{` Stmt `}` | BasicType ID `(` Param Params `)` `{` Stmt `}` | `int` `main` `(` `)` `{` Stmt `}`
+    - Params -> `,` Param Params | ε
+    - Param -> BasicType ID
 
+In this modified grammar for statements, there is a new rule `TopLevel`. This rule is meant to capture the idea of function declarations, and all of the processing for it will happen within the function `parse_top_level` found in `parser.ml`. In TopLevel, we can have any number of functions sequenced together, where each function consists of a return type (`BasicType`, e.g. `int`), a name (`ID`, e.g. `foo`), any number of parameters (where a parameter is a tuple containing the name of the argument and its datatype, e.g. int a => ("a", Int_Type)), followed by the body of the function (`Stmt`).     
+You might notice that there is no `top-level` *type* in `smallCTypes.ml` the way there is a `stmt` type. This is because function declarations are being treated like statements. Since a function declaration is defined as a statement, this grammar will *technically* accept nested functions. However, this would complicate the semantics so we won't test for this. In code, unlike `parse_main` in the previous assignments, there is now a function `parse_top_level`, which will parse all function declarations (including main), and a function `parse_stmt`, which won't expect any function declarations and is similar to the `parse_stmt` you implemented in Project 4a/b. Therefore, the only change necessary to `parse_stmt` is parsing return statements. **Besides for return statements, all new parsing for statements in this project will happen in `parse_top_level`.**
 
-In this modified grammar for statements, there is a new rule `FunctionDecl`. This rule is meant to capture the idea of function declarations, and all of the processing for it will happen within the function `parse_top_level` found in `parser.ml`. In a `FunctionDecl`, each function consists of a return type (`BasicType`, e.g. `int`), a name (`ID`, e.g. `foo`), any number of parameters (where a parameter is a tuple containing the name of the argument and its datatype, e.g. int a => ("a", Int_Type)), followed by the body of the function (`Stmt`).     
-You might notice that in this grammar, technically it is possible to have nested functions. However, this would complicate the semantics so we won't test for this. In fact, we have designed the skeleton such that all processing for function declarations will happen outside of `parse_stmt`. In code, unlike `parse_main` in the previous assignments, there is now a function `parse_top_level`, which will parse all function declarations (including main), and a function `parse_stmt`, which won't expect any function declarations and is similar to the `parse_stmt` you implemented in Project 4a/b. **To reiterate, all new parsing for statements in this project will happen in `parse_top_level` and `parse_stmt` will be left untouched.**
-
-### A Formal Example of Parsing    
+### A Formal Example of Parsing
 Take this SmallC example:
 ```c
 int add(int a, int b) {
@@ -163,25 +166,25 @@ int main() {
 }
 ```
 
-This code will output the following AST after being called with parse_top_level: You don't have to sift through it unless you're testing. Basically, the key things to notice here are:   
-- The entire program is a sequence of two function declarations, `add`, and `main`. Each of these function declarations holds a name, a return type, a list of all the arguments (names + return types), and finally, statement output that you're used to from Project 4a. *The entire body of a function is abstracted away in the fourth member of the tuple in FunctionDecl*.  
+This code will output the following AST after being called with parse_top_level: You don't have to sift through it unless you're testing. Basically, the key things to notice here are:
+- The entire program is a sequence of two function declarations, `add`, and `main`. Each of these function declarations holds a name, a return type, a list of all the arguments (names + return types), and finally, statement output that you're used to from Project 4a. *The entire body of a function is abstracted away in the fourth member of the tuple in FunctionDecl*.
 - The main function is also a function declaration. **In all of our programs, the main function will come last**.
 - With the exception of `main`, **every function will have a non-void return type and a corresponding return statement.**
 
 ```caml
-P5.SmallCTypes.Seq
- (P5.SmallCTypes.FunctionDecl ("add", P5.SmallCTypes.Int_Type,
-   [("a", P5.SmallCTypes.Int_Type); ("b", P5.SmallCTypes.Int_Type)],
-   P5.SmallCTypes.Seq
-    (P5.SmallCTypes.Return
-      (P5.SmallCTypes.Add (P5.SmallCTypes.ID "a", P5.SmallCTypes.ID "b")),
-    P5.SmallCTypes.NoOp)),
- P5.SmallCTypes.FunctionDecl ("main", P5.SmallCTypes.Int_Type, [],
-  P5.SmallCTypes.Seq
-   (P5.SmallCTypes.Return
-     (P5.SmallCTypes.FunctionCall ("add",
-       [P5.SmallCTypes.Int 1; P5.SmallCTypes.Int 2])),
-   P5.SmallCTypes.NoOp)))
+Seq
+ (FunctionDecl ("add", Int_Type,
+   [("a", Int_Type); ("b", Int_Type)],
+   Seq
+    (Return
+      (Add (ID "a", ID "b")),
+    NoOp)),
+ FunctionDecl ("main", Int_Type, [],
+  Seq
+   (Return
+     (FunctionCall ("add",
+       [Int 1; Int 2])),
+   NoOp)))
 ```
 
 ### Part 2: `eval_expr`
@@ -200,15 +203,23 @@ Since thunks become bound to IDs they are evaluated when the ID is evaluated. Th
 
 Evaluating function declarations adds the function to the global function environment and in the case of main (which is assumed to be the last function), the body of the function is evaluated.
 
+Additionally, please note that for loops for this project's updated SmallC can have variables that are previously undeclared. Consider this example of a valid SmallC program:
+```c
+int main(){
+  for (x from 1 to 10){
+    printf(x);
+  }  
+}
+```
 
 ### Helper Functions in `eval.ml`
-We have designed several helper functions to ease the evaluation process. As in Project 3, none of these helper functions are strictly required. The tests will simply check to ensure the environment you return after evaluation is identical to the one we return after evaluation. Thus, although we encourage you to use the following helper functions to aid your implementation, they are by no means required.   
+We have designed several helper functions to ease the evaluation process. As in Project 3, none of these helper functions are strictly required. The tests will simply check to ensure the environment you return after evaluation is identical to the one we return after evaluation. Thus, although we encourage you to use the following helper functions to aid your implementation, they are by no means required.
 There are descriptive blurbs above **every** helper function in `eval.ml`, so make sure you read them! If you decide not to use our helpers, still read the blurbs so you can ensure your implementation has the functionality we expect. Many of the helper functions (such as `insert_val` and `get_val`) are functions you probably used in some form for P4b, and others like `check_type` are trivial to implement. We will expand on two non-trivial helper functions below:
 
-`add_func` and `get_func`     
-As stated earlier, in order to evaluate the result of calling a function `foo()`, we store the function's information (name, return type, parameters, and body) inside a globally accessible funs reference that you can access. `add_func` adds to this global function list, raising a `DeclareError` if the function already exists (since function overloading is not allowed in C). `get_func` should search through the functions and retrieve the entry associated with the function name.  
+`add_func` and `get_func`
+As stated earlier, in order to evaluate the result of calling a function `foo()`, we store the function's information (name, return type, parameters, and body) inside a globally accessible funs reference that you can access. `add_func` adds to this global function list, raising a `DeclareError` if the function already exists (since function overloading is not allowed in C). `get_func` should search through the functions and retrieve the entry associated with the function name.
 
-`new_func_scope`    
+`new_func_scope`
  New_func_scope is the main engine by which lazy evaluation happens during function calls. `new_func_scope` takes a list of parameters, arguments, and the current environment, and transforms each argument into a thunk (remind yourself that a thunk holds the caller's environment, the expression, and its expected return type), inserts each thunk into the environment, and returns the final environment. **Hint:** This function is a good place to raise a `DeclareError` if there are too many or not enough arguments.
 
 ### Debugging Help
